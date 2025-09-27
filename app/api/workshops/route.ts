@@ -1,5 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+import { kv } from "@vercel/kv";
+import { nanoid } from "nanoid";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
@@ -73,10 +75,33 @@ IMPORTANT: Return ONLY valid JSON. Do not include any markdown formatting, code 
       };
     }
 
+    // Generate a short random ID for the workshop
+    const workshopId = nanoid(); // 8 characters long
+    
+    // Prepare workshop data to store
+    const workshopData = {
+      id: workshopId,
+      prompt: prompt,
+      aiGeneratedCopy: aiGeneratedCopy,
+      createdAt: new Date().toISOString(),
+      status: 'draft'
+    };
+
+    try {
+      // Store the workshop data in KV
+      await kv.set(`workshop:${workshopId}`, workshopData);
+      console.log(`Workshop stored with ID: ${workshopId}`);
+    } catch (kvError) {
+      console.error("Error storing workshop in KV:", kvError);
+      // Continue even if KV storage fails
+    }
+
     return NextResponse.json({
       success: true,
-      aiGeneratedCopy
-    });
+      workshopId: workshopId,
+      aiGeneratedCopy,
+      workshopData
+    }); 
 
   } catch (error) {
     console.error("Error generating workshop content:", error);
