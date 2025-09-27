@@ -7,7 +7,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -26,7 +26,7 @@ export default function Home() {
 
       const data = await res.json();
       console.log("base features : the value of the data is ", data);
-      // setResult(data);
+      setResult(data);
     } catch (error) {
       console.error("Error creating workshop:", error);
       alert(
@@ -85,73 +85,30 @@ export default function Home() {
             </button>
           </form>
 
-          {/* {result && (
+          {result && (
             <div className="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">
                 ✅ Workshop Created Successfully!
               </h3>
               <p className="text-green-700 text-sm mb-4">
-                Your workshop has been created and stored in the database.
+                Your workshop has been created and stored in KV storage.
               </p>
 
-              <div className="mb-4">
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  Generated Workshop Details:
-                </h4>
-                <div className="space-y-2 text-sm">
-                  <p>
-                    <strong>Coach ID:</strong> {result.workshop.coachId}
-                  </p>
-                  <p>
-                    <strong>Title:</strong> {result.workshop.title}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {result.workshop.description}
-                  </p>
-                  <p>
-                    <strong>Date & Time:</strong>{" "}
-                    {new Date(result.workshop.dateTime).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  AI Generated Marketing Content:
-                </h4>
-                <div className="space-y-2 text-sm">
-                  <p>
-                    <strong>Headline:</strong>{" "}
-                    {result.workshop.aiGeneratedCopy.headline}
-                  </p>
-                  <p>
-                    <strong>Subheadline:</strong>{" "}
-                    {result.workshop.aiGeneratedCopy.subheadline}
-                  </p>
-                  <p>
-                    <strong>CTA:</strong> {result.workshop.aiGeneratedCopy.cta}
-                  </p>
-                  <p>
-                    <strong>Theme:</strong>{" "}
-                    {result.workshop.aiGeneratedCopy.theme}
-                  </p>
-                </div>
-              </div>
-
               <a
-                href={result.landingPageUrl}
+                href={`/workshop/${
+                  (result as { workshopId: string }).workshopId
+                }`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                View Landing Page
+                Preview Workshop Page
               </a>
               <p className="text-xs text-gray-500 mt-2">
-                Note: The landing page will show &quot;not published&quot; until
-                you publish it.
+                Your workshop is now live and accessible via the link above.
               </p>
             </div>
-          )} */}
+          )}
         </div>
       </div>
     </div>
