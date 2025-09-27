@@ -1,9 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-
-const GOOGLE_API_KEY=AIzaSyBXVnFEvZsyjPqVSoxW60KCswl74KULGyM ;
-
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 export async function POST(req: Request) {
@@ -18,7 +15,7 @@ Include the Tailwind CDN in the head section.
 Make sure the page is beautiful and modern looking.
 `;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   const result = await model.generateContent([
     { text: systemPrompt },
     { text: prompt }
